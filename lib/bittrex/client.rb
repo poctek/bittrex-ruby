@@ -1,11 +1,11 @@
 require 'faraday'
 require 'base64'
+require 'json'
 
 module Bittrex
   class Client
     HOST = 'https://bittrex.com/api/v1.1'
-
-    attr_reader :key, :secret
+attr_reader :key, :secret
 
     def initialize(attrs = {})
       @key    = attrs[:key]
