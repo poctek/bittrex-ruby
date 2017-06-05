@@ -1,3 +1,5 @@
+require 'time'
+
 module Bittrex
   class Order
     attr_reader :type, :id, :limit,

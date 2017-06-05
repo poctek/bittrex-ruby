@@ -1,3 +1,5 @@
+require 'time'
+
 module Bittrex
   class Summary
     attr_reader :name, :high, :low, :volume, :last, :base_volume, :raw, :created_at

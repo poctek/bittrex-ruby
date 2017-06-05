@@ -1,3 +1,5 @@
+require 'time'
+
 module Bittrex
   class Withdrawl
     attr_reader :id, :currency, :quantity, :address, :authorized,

@@ -1,3 +1,5 @@
+require 'time'
+
 module Bittrex
   class Deposit
     attr_reader :id, :transaction_id, :address, :quantity, :currency, :confirmations, :executed_at
