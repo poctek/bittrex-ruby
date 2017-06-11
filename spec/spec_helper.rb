@@ -1,5 +1,9 @@
+require 'awesome_print'
 require 'simplecov'
 SimpleCov.start
+
+require 'dotenv'
+Dotenv.load('spec/.env') #if File.exists? 'spec/.env'
 
 require 'rspec'
 require 'bittrex'
