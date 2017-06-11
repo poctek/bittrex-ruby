@@ -1,4 +1,3 @@
-require 'json'
 require 'simplecov'
 SimpleCov.start
 
@@ -9,9 +8,11 @@ Dir[File.join(Bittrex.root, 'spec/fixtures/**/*.rb')].each { |f| require f }
 Dir[File.join(Bittrex.root, 'spec/support/**/*.rb')].each {|f| require f}
 
 RSpec.configure do |config|
-  config.before(:each) do
-    Bittrex.stub(:client)
+  config.expect_with :rspec do |c|
+    c.syntax = [:should, :expect]
   end
+
+  config.mock_with :mocha
 end
 
 def fixture(resource)

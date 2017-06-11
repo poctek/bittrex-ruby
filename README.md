@@ -38,8 +38,13 @@ Set up your keys at: https://bittrex.com/Account/ManageApiKey
 
 ## Contributing
 
-1. Fork it ( https://github.com/[my-github-username]/bittrex/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+* Check original Source https://github.com/mwerner/bittrex
+
+
+## Copyright
+
+Copyright (c) 2017 Sangmin Ryu (Only for 2017 code)
+
+Copyright (c) 2014 Matthew Werner (Original works)
+
+See [LICENSE][] for details.

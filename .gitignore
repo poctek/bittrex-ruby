@@ -23,3 +23,5 @@ tmp
 *.a
 mkmf.log
 script
+.idea
+.ruby-version
