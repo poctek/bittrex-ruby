@@ -3,6 +3,7 @@ require "bittrex/version"
 module Bittrex
   autoload :Market,        'bittrex/market'
   autoload :Client,        'bittrex/client'
+  autoload :Clientable,    'bittrex/clientable'
   autoload :Configuration, 'bittrex/configuration'
   autoload :Currency,      'bittrex/currency'
   autoload :Deposit,       'bittrex/deposit'

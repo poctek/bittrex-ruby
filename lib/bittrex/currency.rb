@@ -1,5 +1,7 @@
 module Bittrex
   class Currency
+    include Bittrex::Clientable
+
     attr_reader :name, :abbreviation, :minimum_confirmation, :transaction_fee, :active, :raw
 
     alias_method :min_confirmation, :minimum_confirmation
@@ -16,12 +18,6 @@ module Bittrex
 
     def self.all
       client.get('public/getcurrencies').map{|data| new(data) }
-    end
-
-    private
-
-    def self.client
-      @client ||= Bittrex.client
     end
   end
 end

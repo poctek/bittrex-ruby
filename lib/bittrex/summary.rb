@@ -2,6 +2,8 @@ require 'time'
 
 module Bittrex
   class Summary
+    include Bittrex::Clientable
+
     attr_reader :name, :high, :low, :volume, :last, :base_volume, :raw, :created_at
 
     alias_method :vol, :volume
@@ -20,12 +22,6 @@ module Bittrex
 
     def self.all
       client.get('public/getmarketsummaries').map{|data| new(data) }
-    end
-
-    private
-
-    def self.client
-      @client ||= Bittrex.client
     end
   end
 end

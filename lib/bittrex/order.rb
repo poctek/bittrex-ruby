@@ -2,6 +2,8 @@ require 'time'
 
 module Bittrex
   class Order
+    include Bittrex::Clientable
+
     attr_reader :type, :id, :limit,
                 :exchange, :price, :quantity, :remaining,
                 :total, :fill, :executed_at, :raw
@@ -55,10 +57,6 @@ module Bittrex
         type: type,
         depth: depth
       })
-    end
-
-    def self.client
-      @client ||= Bittrex.client
     end
   end
 end

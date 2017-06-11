@@ -1,5 +1,7 @@
 module Bittrex
   class Wallet
+    include Bittrex::Clientable
+
     attr_reader :id, :currency, :balance, :available, :pending, :address, :requested, :raw
 
     def initialize(attrs = {})
@@ -17,10 +19,9 @@ module Bittrex
       client.get('account/getbalances').map{|data| new(data) }
     end
 
-    private
-
-    def self.client
-      @client ||= Bittrex.client
+    def self.get(currency:)
+      client.get('account/getbalance', currency: currency).map{|data| new(data) }
     end
+
   end
 end
