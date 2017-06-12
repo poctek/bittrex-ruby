@@ -1,14 +1,8 @@
 module Bittrex
   module Clientable
     def self.included(base)
-      base.extend ClassMethods
-    end
-
-    module ClassMethods
-      private
-      def client
-        @client ||= Bittrex.client
-      end
+      base.extend SingleForwardable
+      base.def_single_delegator :Bittrex, :client
     end
   end
 end
