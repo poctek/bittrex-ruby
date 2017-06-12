@@ -14,8 +14,6 @@ RSpec.configure do |config|
   end
 
   config.mock_with :mocha
-
-  config.extend APIHelper
 end
 
 def fixture(resource)

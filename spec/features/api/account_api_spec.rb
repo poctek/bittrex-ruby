@@ -17,8 +17,9 @@ module Bittrex::Api
       Account.getdepositaddress('BTC').size.should > 1
     end
 
-    xit '/account/withdraw' do
-      pending #'This api is not ready for acceptance test ex) Account.withdraw(currency quantity address paymentid)'
+    it '/account/withdraw' do
+      pending 'This api is not ready for acceptance test'
+      Account.withdraw(currency quantity address paymentid)
     end
 
     it '/account/getorder' do

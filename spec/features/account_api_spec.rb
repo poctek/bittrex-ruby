@@ -20,8 +20,9 @@ module Bittrex
       Bittrex.client.get('account/getdepositaddress', currency: 'BTC')['Currency'].should == 'BTC'
     end
 
-    xit '/account/withdraw' do
-      fail '미지원'
+    it '/account/withdraw' do
+      pending 'This api is not ready for acceptance test'
+      Withdraw.withdraw
     end
 
     it '/account/getorder' do

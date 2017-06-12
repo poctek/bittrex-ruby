@@ -19,6 +19,13 @@ RSpec.describe 'Public Api' do
     Bittrex::Summary.all.size.should > 199
   end
 
+  it '/public/getorderbook' do
+    Bittrex::Order.book('BTC-ETH', 'both', 50).tap do |o|
+      o.size.should >= 100
+      o.map{|i|i.type}.uniq.size.should == 2
+    end
+  end
+
   xit '/public/getmarketsummary' do
     fail '미지원'
   end

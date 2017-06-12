@@ -27,6 +27,14 @@ module Bittrex::Api
       end
     end
 
+    it '/public/getorderbook' do
+      Public.getorderbook('BTC-ETH', 'both', 50).tap do |o|
+        o.size.should == 2
+        o['buy'].size.should >= 50
+        o['sell'].size.should >= 50
+      end
+    end
+
     it '/public/getmarkethistory' do
       Public.getmarkethistory('BTC-ETH').size.should > 10
     end

@@ -1,21 +1,26 @@
 require 'spec_helper'
 
-RSpec.describe 'Market Api' do
-  before {set_bittrex_api_token}
+module Bittrex
+  RSpec.describe 'Market Api' do
+    before {set_bittrex_api_token}
 
-  xit '/market/buylimit' do
-    fail '미지원'
-  end
+    it '/market/buylimit' do
+      pending '미지원'
+      Market.buylimit
+    end
 
-  xit '/market/selllimit' do
-    fail '미지원'
-  end
+    it '/market/selllimit' do
+      pending '미지원'
+      Market.selllimit
+    end
 
-  xit '/market/cancel' do
-    fail '미지원'
-  end
+    it '/market/cancel' do
+      pending '미지원'
+      Market.cancel
+    end
 
-  it '/market/getopenorders' do
-    Bittrex::Order.open.size.should >= 0
+    it '/market/getopenorders' do
+      Order.open.size.should >= 0
+    end
   end
 end
