@@ -5,10 +5,10 @@ describe Bittrex::Currency do
   let(:subject){ Bittrex::Currency.new(data) }
 
   describe '#initialization' do
-    it { should_assign_attribute(subject, :name, 'Bitcoin') }
-    it { should_assign_attribute(subject, :abbreviation, 'BTC') }
-    it { should_assign_attribute(subject, :transaction_fee, 0.00000008) }
-    it { should_assign_attribute(subject, :minimum_confirmation, 5) }
-    it { should_assign_attribute(subject, :active, true) }
+    it {expect(subject.name).to eq('Bitcoin')}
+    it {expect(subject.abbreviation).to eq('BTC')}
+    it {expect(subject.transaction_fee).to eq(0.00000008)}
+    it {expect(subject.minimum_confirmation).to eq(5)}
+    it {expect(subject.active).to eq(true)}
   end
 end

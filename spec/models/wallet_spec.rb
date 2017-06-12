@@ -5,12 +5,12 @@ describe Bittrex::Wallet do
   let(:subject){ Bittrex::Wallet.new(data) }
 
   describe '#initialization' do
-    it { should_assign_attribute(subject, :id, '3dab465d-d0f2-4xxx-819f-aafad450f05b') }
-    it { should_assign_attribute(subject, :currency, 'CRYPT') }
-    it { should_assign_attribute(subject, :balance, 115.0) }
-    it { should_assign_attribute(subject, :available, 0.0) }
-    it { should_assign_attribute(subject, :pending, 0.0) }
-    it { should_assign_attribute(subject, :address, nil) }
-    it { should_assign_attribute(subject, :requested, false) }
+    it {expect(subject.id).to eq('3dab465d-d0f2-4xxx-819f-aafad450f05b')}
+    it {expect(subject.currency).to eq('CRYPT')}
+    it {expect(subject.balance).to eq(115.0)}
+    it {expect(subject.available).to eq(0.0)}
+    it {expect(subject.pending).to eq(0.0)}
+    it {expect(subject.address).to eq(nil)}
+    it {expect(subject.requested).to eq(false)}
   end
 end

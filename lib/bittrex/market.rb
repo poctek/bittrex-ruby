@@ -2,8 +2,6 @@ require 'time'
 
 module Bittrex
   class Market
-    include Bittrex::Clientable
-
     attr_reader :name, :currency, :base, :currency_name, :base_name, :minimum_trade, :active, :created_at, :raw
 
     def initialize(attrs = {})
@@ -19,7 +17,7 @@ module Bittrex
     end
 
     def self.all
-      client.get('public/getmarkets').map{|data| new(data) }
+      Bittrex::Api::Public.getmarkets.map{|data| new(data) }
     end
   end
 end

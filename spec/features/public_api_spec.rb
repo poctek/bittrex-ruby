@@ -5,7 +5,6 @@ RSpec.describe 'Public Api' do
 
   it '/public/getmarkets' do
     Bittrex::Market.all.size.should > 199
-    ap Bittrex::Market.all.first
   end
 
   it '/public/getcurrencies' do
@@ -20,13 +19,11 @@ RSpec.describe 'Public Api' do
     Bittrex::Summary.all.size.should > 199
   end
 
-  it '/public/getmarketsummary' do
+  xit '/public/getmarketsummary' do
     fail '미지원'
-
-    Bittrex.client.get('/public/getmarketsummary')
   end
 
-  it '/public/getmarkethistory' do
+  xit '/public/getmarkethistory' do
     fail '미지원'
   end
 end

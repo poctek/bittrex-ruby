@@ -2,61 +2,66 @@ require 'time'
 
 module Bittrex
   class Order
-    include Bittrex::Clientable
-
     attr_reader :type, :id, :limit,
                 :exchange, :price, :quantity, :remaining,
                 :total, :fill, :executed_at, :raw
 
     def initialize(attrs = {})
-      @id = attrs['Id'] || attrs['OrderUuid']
-      @type = (attrs['Type'] || attrs['OrderType']).to_s.capitalize
-      @exchange = attrs['Exchange']
-      @quantity = attrs['Quantity']
-      @remaining = attrs['QuantityRemaining']
-      @price = attrs['Rate'] || attrs['Price']
-      @total = attrs['Total']
-      @fill = attrs['FillType']
-      @limit = attrs['Limit']
-      @commission = attrs['Commission']
+      @id             = attrs['Id'] || attrs['OrderUuid']
+      @type           = (attrs['Type'] || attrs['OrderType'])
+      @exchange       = attrs['Exchange']
+      @quantity       = attrs['Quantity']
+      @remaining      = attrs['QuantityRemaining']
+      @price          = attrs['Rate'] || attrs['Price']
+      @price_per_unit = attrs['PricePerUnit']
+      @total          = attrs['Total']
+      @fill           = attrs['FillType']
+      @limit          = attrs['Limit']
+      @commission     = attrs['Commission'] || attrs['CommissionPaid']
+      @executed_at    = attrs['TimeStamp'] ? Time.parse(attrs['TimeStamp']) : nil
+      @opend          = attrs['Opened'] ? Time.parse(attrs['Opened']) : nil
+      @closed         = attrs['Closed'] ? Time.parse(attrs['Closed']) : nil
+      @is_open        = attrs['IsOpen']
+
       @raw = attrs
-      @executed_at = Time.parse(attrs['TimeStamp']) if attrs['TimeStamp']
     end
 
-    def self.book(market, type, depth = 50)
-      orders = []
+    class << self
+      def book(market, type, depth = 50)
+        orders = []
 
-      if type.to_sym == :both
-        orderbook(market, type.downcase, depth).each_pair do |type, values|
-          values.each do |data|
+        if type.to_sym == :both
+          orderbook(market, type.downcase, depth).each_pair do |type, values|
+            values.each do |data|
+              orders << new(data.merge('Type' => type))
+            end
+          end
+        else
+          orderbook(market, type.downcase, depth).each do |data|
             orders << new(data.merge('Type' => type))
           end
         end
-      else
-        orderbook(market, type.downcase, depth).each do |data|
-          orders << new(data.merge('Type' => type))
-        end
+
+        orders
       end
 
-      orders
-    end
+      def open
+        Bittrex::Api::Market.getopenorders(nil).map {|data| new(data)}
+      end
 
-    def self.open
-      client.get('market/getopenorders').map{|data| new(data) }
-    end
+      def history(market: nil)
+        Bittrex::Api::Account.getorderhistory(market).map {|data| new(data)}
+      end
 
-    def self.history
-      client.get('account/getorderhistory').map{|data| new(data) }
-    end
+      def get(uuid)
+        new Bittrex::Api::Account.getorder(uuid)
+      end
 
-    private
+      private
 
-    def self.orderbook(market, type, depth)
-      client.get('public/getorderbook', {
-        market: market,
-        type: type,
-        depth: depth
-      })
+      def orderbook(market, type, depth)
+        Bittrex::Api::Public.getorderbook(market, type, depth)
+      end
     end
   end
 end

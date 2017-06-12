@@ -2,8 +2,6 @@ require 'time'
 
 module Bittrex
   class Deposit
-    include Bittrex::Clientable
-
     attr_reader :id, :transaction_id, :address, :quantity, :currency, :confirmations, :executed_at
 
     def initialize(attrs = {})
@@ -17,7 +15,7 @@ module Bittrex
     end
 
     def self.all
-      client.get('account/getdeposithistory').map{|data| new(data) }
+      Bittrex::Api::Account.getdeposithistory.map{|data| new(data) }
     end
   end
 end

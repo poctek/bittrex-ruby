@@ -17,3 +17,9 @@ RSpec.configure do |config|
 
   config.extend APIHelper
 end
+
+def fixture(resource)
+  path = File.join(Bittrex.root, "spec/fixtures/#{resource}.json")
+  JSON.parse File.read(path)
+end
+

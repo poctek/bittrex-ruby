@@ -5,9 +5,9 @@ describe Bittrex::Quote do
   let(:subject){ Bittrex::Quote.new('BTC-HPY', data) }
 
   describe '#initialization' do
-    it { should_assign_attribute(subject, :market, 'BTC-HPY') }
-    it { should_assign_attribute(subject, :bid, 0.01607601) }
-    it { should_assign_attribute(subject, :ask, 0.01633299) }
-    it { should_assign_attribute(subject, :last, 0.01635099) }
+    it {expect(subject.market).to eq('BTC-HPY')}
+    it {expect(subject.bid).to eq(0.01607601)}
+    it {expect(subject.ask).to eq(0.01633299)}
+    it {expect(subject.last).to eq(0.01635099)}
   end
 end

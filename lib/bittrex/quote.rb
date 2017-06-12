@@ -1,7 +1,5 @@
 module Bittrex
   class Quote
-    include Bittrex::Clientable
-
     attr_reader :market, :bid, :ask, :last, :raw
 
     def initialize(market, attrs = {})
@@ -15,7 +13,7 @@ module Bittrex
     # Example:
     # Bittrex::Quote.current('BTC-HPY')
     def self.current(market)
-      new(market, client.get('public/getticker', market: market))
+      new(market, Bittrex::Api::Public.getticker(market))
     end
   end
 end
