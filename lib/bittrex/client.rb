@@ -5,7 +5,7 @@ require 'json'
 module Bittrex
   class Client
     HOST = 'https://bittrex.com/api/v1.1'
-attr_reader :key, :secret
+    attr_reader :key, :secret
 
     def initialize(attrs = {})
       @key    = attrs[:key]
@@ -13,7 +13,7 @@ attr_reader :key, :secret
     end
 
     def get(path, params = {}, headers = {})
-      nonce = Time.now.to_i
+      nonce    = Time.now.to_i
       response = connection.get do |req|
         url = "#{HOST}/#{path}"
         req.params.merge!(params)
@@ -22,23 +22,25 @@ attr_reader :key, :secret
         if key
           req.params[:apikey]   = key
           req.params[:nonce]    = nonce
-          req.headers[:apisign] = signature(url, nonce)
+          req.headers[:apisign] = signature(req)
         end
       end
 
-      JSON.parse(response.body)['result']
+      json = JSON.parse(response.body)
+      raise json.to_s unless json['success']
+      json['result']
     end
 
     private
 
-    def signature(url, nonce)
-      OpenSSL::HMAC.hexdigest('sha512', secret, "#{url}?apikey=#{key}&nonce=#{nonce}")
+    def signature(req)
+      OpenSSL::HMAC.hexdigest('sha512', secret, "#{req.path}?#{req.params&.to_query}")
     end
 
     def connection
       @connection ||= Faraday.new(:url => HOST) do |faraday|
-        faraday.request  :url_encoded
-        faraday.adapter  Faraday.default_adapter
+        faraday.request :url_encoded
+        faraday.adapter Faraday.default_adapter
       end
     end
   end
