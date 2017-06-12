@@ -1,4 +1,4 @@
-require "bittrex/version"
+require 'bittrex/version'
 
 module Bittrex
   autoload :Market,        'bittrex/market'
@@ -12,6 +12,7 @@ module Bittrex
   autoload :Summary,       'bittrex/summary'
   autoload :Wallet,        'bittrex/wallet'
   autoload :Withdrawl,     'bittrex/withdrawl'
+  autoload :Api,           'bittrex/api'
 
   def self.client
     @client ||= Client.new(configuration.auth)

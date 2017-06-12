@@ -1,4 +1,4 @@
-module Bittrex
+module Bittrex::Api
   module Clientable
     def self.included(base)
       base.extend SingleForwardable
