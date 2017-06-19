@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["neocoin@gmail.com"]
   spec.summary       = %q{API Client for the Bittrex API}
   spec.description   = %q{API Client for the Bittrex API}
-  spec.homepage      = "https://github.com/neocoin/bittrex"
+  spec.homepage      = "https://github.com/neocoin/bittrex-ruby"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
