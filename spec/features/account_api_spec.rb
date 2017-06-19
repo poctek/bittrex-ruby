@@ -35,7 +35,7 @@ module Bittrex
     end
 
     it '/account/getwithdrawalhistory' do
-      Withdrawl.all.size.should == 0
+      Withdrawl.all.size.should > 0
     end
 
     it '/account/getdeposithistory' do

@@ -32,7 +32,7 @@ module Bittrex::Api
     end
 
     it '/account/getwithdrawalhistory' do
-      Account.getwithdrawalhistory.size.should == 0
+      Account.getwithdrawalhistory.size.should > 0
     end
 
     it '/account/getdeposithistory' do
