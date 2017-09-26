@@ -4,7 +4,9 @@ require 'json'
 
 module Bittrex
   class Client
-    HOST = 'https://bittrex.com/api/v1.1'
+    HOST = 'https://bittrex.com'
+    V1_PREFIX = '/api/v1.1'
+    V2_PREFIX = '/api/v2.0'
     attr_reader :key, :secret
 
     def initialize(attrs = {})
@@ -15,9 +17,30 @@ module Bittrex
     def get(path, params = {}, headers = {})
       nonce    = Time.now.to_i
       response = connection.get do |req|
-        url = "#{HOST}/#{path}"
+        url = "#{HOST}#{V1_PREFIX}/#{path}"
         req.params.merge!(params)
         req.url(url)
+        Bittrex.logger.debug("#{url}?#{req.params&.to_query}")
+
+        if key
+          req.params[:apikey]   = key
+          req.params[:nonce]    = nonce
+          req.headers[:apisign] = signature(req)
+        end
+      end
+
+      json = JSON.parse(response.body)
+      raise json.to_s unless json['success']
+      json['result']
+    end
+
+    def get_v2(path, params = {}, headers = {})
+      nonce    = Time.now.to_i
+      response = connection.get do |req|
+        url = "#{HOST}#{V2_PREFIX}#{path}"
+        req.params.merge!(params)
+        req.url(url)
+        Bittrex.logger.debug("#{url}?#{req.params&.to_query}")
 
         if key
           req.params[:apikey]   = key
