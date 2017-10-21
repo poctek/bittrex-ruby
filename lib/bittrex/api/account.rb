@@ -31,7 +31,7 @@ module Bittrex
       end
 
       def getordersex(uuids)
-        client.get('account/getordersex', uuids)
+        client.get('account/getordersex', o: uuids)
       end
       module_function :getordersex
 

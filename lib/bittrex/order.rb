@@ -58,7 +58,7 @@ module Bittrex
       end
 
       def gets(uuids)
-        new Bittrex::Api::Account.getordersex(uuids)
+        Bittrex::Api::Account.getordersex(uuids)
       end
 
       private

@@ -28,8 +28,8 @@ module Bittrex::Api
     end
 
     it '/account/getordersex' do
-      orders = Bittrex::Api::Account.getorderhistory.take(3)
-      Account.getordersex(o: orders.map{|i| i['OrderUuid']}).should have(3).items
+      orders = Account.getorderhistory.take(3)
+      Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(3).items
     end
 
     # https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
