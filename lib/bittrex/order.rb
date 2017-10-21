@@ -57,6 +57,10 @@ module Bittrex
         new Bittrex::Api::Account.getorder(uuid)
       end
 
+      def gets(uuids)
+        new Bittrex::Api::Account.getordersex(uuids)
+      end
+
       private
 
       def orderbook(market, type, depth)

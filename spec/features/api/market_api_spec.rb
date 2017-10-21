@@ -20,9 +20,7 @@ module Bittrex::Api
     end
 
     it '/market/getopenorders' do
-      pending 'This api is not ready for acceptance test'
-      Market.getopenorders(nil).size.should == 0
-      Market.getopenorders('BTC').size.should == 0
+      Market.getopenorders('BTC-ETH').size.should >= 0
     end
   end
 end

@@ -30,6 +30,11 @@ module Bittrex
         CODE
       end
 
+      def getordersex(uuids)
+        client.get('account/getordersex', uuids)
+      end
+      module_function :getordersex
+
     end
   end
 end

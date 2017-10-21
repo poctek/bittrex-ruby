@@ -38,6 +38,14 @@ module Bittrex::Api
     it '/public/getmarkethistory' do
       Public.getmarkethistory('BTC-ETH').size.should > 10
     end
+
+    context 'Error handling' do
+      it 'No market' do
+        expect{Public.getmarkethistory('AAA-BTS')}.to raise_error(RuntimeError) do |e|
+          e.message.should == '{"success"=>false, "message"=>"INVALID_MARKET", "result"=>nil}'
+        end
+      end
+    end
   end
 end
 

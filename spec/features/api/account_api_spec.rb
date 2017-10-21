@@ -27,6 +27,12 @@ module Bittrex::Api
       Account.getorder(last_order['OrderUuid'])['OrderUuid'].should == last_order['OrderUuid']
     end
 
+    it '/account/getordersex' do
+      orders = Bittrex::Api::Account.getorderhistory.tap{|o| ap o.size}.take(3)
+      Account.getordersex(o: orders.map{|i| i['OrderUuid']}).should have(3).items
+    end
+
+    # https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
     it '/account/getorderhistory' do
       Account.getorderhistory.size.should > 0
     end

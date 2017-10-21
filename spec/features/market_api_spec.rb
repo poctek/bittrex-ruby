@@ -5,17 +5,17 @@ module Bittrex
     before {set_bittrex_api_token}
 
     it '/market/buylimit' do
-      pending '미지원'
+      pending 'Need Real Account'
       Market.buylimit
     end
 
     it '/market/selllimit' do
-      pending '미지원'
+      pending 'Need Real Account'
       Market.selllimit
     end
 
     it '/market/cancel' do
-      pending '미지원'
+      pending 'Need Real Account'
       Market.cancel
     end
 
