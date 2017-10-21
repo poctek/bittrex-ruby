@@ -27,3 +27,5 @@ script
 .ruby-version
 spec/.env
 tags
+spec/features/maintain/*
+spec/features/maintain

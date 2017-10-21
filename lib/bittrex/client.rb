@@ -1,6 +1,8 @@
+require 'rest-client'
 require 'faraday'
 require 'base64'
 require 'json'
+require 'openssl'
 
 module Bittrex
   class Client
@@ -10,44 +12,32 @@ module Bittrex
     attr_reader :key, :secret
 
     def initialize(attrs = {})
-      @key    = attrs[:key]
+      @key = attrs[:key]
       @secret = attrs[:secret]
     end
 
-    def get(path, params = {}, headers = {})
-      nonce    = Time.now.to_i
-      response = connection.get do |req|
-        url = "#{HOST}#{V1_PREFIX}/#{path}"
-        req.params.merge!(params)
-        req.url(url)
-        Bittrex.logger.debug("#{url}?#{req.params&.to_query}")
+    def get(path, params = {})
+      nonce = Time.now.to_i
+      query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
+      query2 = Faraday::Utils::ParamsHash.new.merge!(params).to_query(Faraday::FlatParamsEncoder)
+      query = [query1, query2].compact.reject{|i| i.empty?} * '&'
+      url = ["#{HOST}#{V1_PREFIX}/#{path}",query].compact * '?'
 
-        if key
-          req.params[:apikey]   = key
-          req.params[:nonce]    = nonce
-          req.headers[:apisign] = signature(req)
-        end
-      end
+      response = RestClient.get(url, apisign: signature(url))
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
       json['result']
     end
 
-    def get_v2(path, params = {}, headers = {})
-      nonce    = Time.now.to_i
-      response = connection.get do |req|
-        url = "#{HOST}#{V2_PREFIX}#{path}"
-        req.params.merge!(params)
-        req.url(url)
-        Bittrex.logger.debug("#{url}?#{req.params&.to_query}")
+    def get_v2(path, params = {})
+      nonce = Time.now.to_i
+      query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
+      query2 = Faraday::Utils::ParamsHash.new.merge!(params).to_query(Faraday::FlatParamsEncoder)
+      query = [query1, query2].compact.reject{|i| i.empty?} * '&'
+      url = ["#{HOST}#{V2_PREFIX}/#{path}",query].compact * '?'
 
-        if key
-          req.params[:apikey]   = key
-          req.params[:nonce]    = nonce
-          req.headers[:apisign] = signature(req)
-        end
-      end
+      response = RestClient.get(url, apisign: signature(url))
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
@@ -56,8 +46,8 @@ module Bittrex
 
     private
 
-    def signature(req)
-      OpenSSL::HMAC.hexdigest('sha512', secret, "#{req.path}?#{req.params&.to_query}")
+    def signature(url)
+      ::OpenSSL::HMAC.hexdigest 'sha512', secret, url
     end
 
     def connection
