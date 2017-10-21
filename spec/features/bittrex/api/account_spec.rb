@@ -28,7 +28,7 @@ module Bittrex::Api
     end
 
     it '/account/getordersex' do
-      orders = Bittrex::Api::Account.getorderhistory.tap{|o| ap o.size}.take(3)
+      orders = Bittrex::Api::Account.getorderhistory.take(3)
       Account.getordersex(o: orders.map{|i| i['OrderUuid']}).should have(3).items
     end
 
@@ -43,6 +43,18 @@ module Bittrex::Api
 
     it '/account/getdeposithistory' do
       Account.getdeposithistory.size.should > 0
+    end
+
+    context 'error handling' do
+      it 'return empty list on #getordersex' do
+        Account.getordersex(o: ['aaa']).should == []
+      end
+
+      it 'fire error on #getorder' do
+        expect{Account.getorder('aaa')}.to raise_error(RuntimeError) do |e|
+          e.message.should == '{"success"=>false, "message"=>"UUID_INVALID", "result"=>nil}'
+        end
+      end
     end
   end
 
