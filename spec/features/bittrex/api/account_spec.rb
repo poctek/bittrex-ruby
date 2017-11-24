@@ -28,8 +28,9 @@ module Bittrex::Api
     end
 
     it '/account/getordersex' do
-      orders = Account.getorderhistory.take(3)
-      Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(3).items
+      size = 50;nil
+      orders = Account.getorderhistory.take(size);nil
+      Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(size).items
     end
 
     # https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
@@ -47,7 +48,7 @@ module Bittrex::Api
 
     context 'error handling' do
       it 'return empty list on #getordersex' do
-        Account.getordersex(o: ['aaa']).should == []
+        Account.getordersex(['aaa']).should == []
       end
 
       it 'fire error on #getorder' do

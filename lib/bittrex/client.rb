@@ -23,7 +23,8 @@ module Bittrex
       query = [query1, query2].compact.reject{|i| i.empty?} * '&'
       url = ["#{HOST}#{V1_PREFIX}/#{path}",query].compact * '?'
 
-      response = RestClient.get(url, apisign: signature(url))
+      # Request.execute(:method => :get, :url => url, :headers => headers, &block)
+      response = RestClient::Request.execute(method: :get, url: url, headers: {apisign: signature(url)}, open_timeout: 2, read_timeout: 2)
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
