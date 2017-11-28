@@ -17,14 +17,15 @@ module Bittrex
     end
 
     def get(path, params = {})
+      read_timeout, open_timeout = params.delete(:read_timeout){3}, params.delete(:open_timeout){2}
+
       nonce = Time.now.to_i
       query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
       query2 = Faraday::Utils::ParamsHash.new.merge!(params).to_query(Faraday::FlatParamsEncoder)
       query = [query1, query2].compact.reject{|i| i.empty?} * '&'
       url = ["#{HOST}#{V1_PREFIX}/#{path}",query].compact * '?'
 
-      response = RestClient::Request.execute(method: :get, url: url, headers: {apisign: signature(url)}, open_timeout: 2, read_timeout: 3)
-      # Request.execute(:method => :get, :url => url, :headers => headers, &block)
+      response = RestClient::Request.execute(method: :get, url: url, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
