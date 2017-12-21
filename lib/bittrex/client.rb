@@ -46,6 +46,19 @@ module Bittrex
       json['result']
     end
 
+    def post(path, params = {})
+      nonce = Time.now.to_i
+      query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
+      query = [query1].compact.reject{|i| i.empty?} * '&'
+      url = ["#{HOST}#{V1_PREFIX}/#{path}",query].compact * '?'
+
+      response = RestClient.post(url, params, apisign: signature(url))
+
+      json = JSON.parse(response.body)
+      raise json.to_s unless json['success']
+      json['result']
+    end
+
     private
 
     def signature(url)

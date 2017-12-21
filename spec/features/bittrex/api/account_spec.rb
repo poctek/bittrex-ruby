@@ -33,6 +33,12 @@ module Bittrex::Api
       Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(size).items
     end
 
+    it '/account/getordersex' do
+      size = 50;nil
+      orders = Account.getorderhistory.take(size);nil
+      Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(size).items
+    end
+
     # https://bittrex.com/Api/v2.0/auth/orders/GetOrderHistory
     it '/account/getorderhistory' do
       Account.getorderhistory.size.should > 0
