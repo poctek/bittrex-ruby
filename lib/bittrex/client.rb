@@ -27,9 +27,7 @@ module Bittrex
 
       response = RestClient::Request.execute(method: :get, url: url, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
 
-      json = JSON.parse(response.body)
-      raise json.to_s unless json['success']
-      json['result']
+      JSON.parse(response.body)
     end
 
     def get_v2(path, params = {})
