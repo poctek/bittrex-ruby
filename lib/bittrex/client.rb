@@ -17,7 +17,7 @@ module Bittrex
     end
 
     def get(path, params = {})
-      read_timeout, open_timeout = params.delete(:read_timeout){3}, params.delete(:open_timeout){2}
+      read_timeout, open_timeout = params.delete(:read_timeout){60}, params.delete(:open_timeout){60}
 
       nonce = Time.now.to_i
       query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
