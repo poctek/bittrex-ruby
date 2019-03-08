@@ -3,7 +3,6 @@ require 'spec_helper'
 
 module Bittrex::Api
   RSpec.describe 'Market Api' do
-    before {set_bittrex_api_token}
     it '/market/buylimit' do
       pending 'This api is not ready for acceptance test'
       Market.buylimit(market, quantity, rate)

@@ -3,7 +3,6 @@ require 'spec_helper'
 
 module Bittrex::Api
   RSpec.describe 'Account API' do
-    before {set_bittrex_api_token}
 
     it '/account/getbalances' do
       Account.getbalances.size.should > 1
@@ -28,14 +27,14 @@ module Bittrex::Api
     end
 
     it '/account/getordersex' do
-      size = 50;nil
-      orders = Account.getorderhistory.take(size);nil
+      size = 50
+      orders = Account.getorderhistory.take(size)
       Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(size).items
     end
 
     it '/account/getordersex' do
-      size = 50;nil
-      orders = Account.getorderhistory.take(size);nil
+      size = 50
+      orders = Account.getorderhistory.take(size)
       Account.getordersex(orders.map{|i| i['OrderUuid']}).should have(size).items
     end
 

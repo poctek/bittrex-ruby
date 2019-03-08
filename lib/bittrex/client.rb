@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rest-client'
 require 'faraday'
 require 'base64'
@@ -9,7 +11,7 @@ module Bittrex
     attr_reader :key, :secret
 
     def host
-      'https://bittrex.com'
+      'https://api.bittrex.com'
     end
 
     def prefix

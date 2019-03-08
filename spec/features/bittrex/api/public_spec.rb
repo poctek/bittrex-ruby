@@ -1,8 +1,8 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 module Bittrex::Api
   RSpec.describe 'Public Api' do
-    before {set_bittrex_api_token}
 
     it '/public/getmarkets' do
       Public.getmarkets.size.should > 100

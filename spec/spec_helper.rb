@@ -17,6 +17,8 @@ RSpec.configure do |config|
   end
 
   config.mock_with :mocha
+
+  config.before(:each){set_bittrex_api_token}
 end
 
 def fixture(resource)

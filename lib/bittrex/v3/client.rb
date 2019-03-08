@@ -1,4 +1,4 @@
-require 'bittrex/client'
+# frozen_string_literal: true
 
 module Bittrex
   module V3
