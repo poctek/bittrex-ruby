@@ -1,7 +1,5 @@
-require 'bittrex/v3/client'
-
 module Bittrex
-  module V2
+  module V3
     autoload :Client, 'bittrex/v3/client'
   end
 end
