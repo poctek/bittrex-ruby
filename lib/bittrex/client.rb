@@ -8,11 +8,7 @@ require 'openssl'
 
 module Bittrex
   class Client
-    attr_reader :key, :secret
-
-    def host
-      'https://api.bittrex.com'
-    end
+    attr_reader :key, :secret, :host
 
     def prefix
       '/api/v1.1'
@@ -21,9 +17,11 @@ module Bittrex
     def initialize(attrs = {})
       @key = attrs[:key]
       @secret = attrs[:secret]
+      @host = attrs[:host] || 'https://api.bittrex.com'
     end
 
-    def get(path, params = {})
+    def get(path, options = {})
+      params = options.dup
       read_timeout, open_timeout = params.delete(:read_timeout){3}, params.delete(:open_timeout){2}
 
       nonce = Time.now.to_i
@@ -39,13 +37,17 @@ module Bittrex
       json['result']
     end
 
-    def post(path, params = {})
+    def post(path, options = {})
+      params = options.dup
+      read_timeout, open_timeout = params.delete(:read_timeout){10}, params.delete(:open_timeout){5}
+
       nonce = Time.now.to_i
       query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
       query = [query1].compact.reject(&:empty?) * '&'
       url = ["#{host}#{prefix}/#{path}",query].compact * '?'
 
-      response = RestClient.post(url, params, apisign: signature(url))
+      # response = RestClient.post(url, params, apisign: signature(url))
+      response = RestClient::Request.execute(method: :post, url: url, payload: params, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
