@@ -34,7 +34,7 @@ module Bittrex
     end
 
     def get(path, options = {})
-      response = get_with_sign(path, options)
+      response = get_with_sign(path.gsub(%r{^/}, ''), options)
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
       json['result']
@@ -54,7 +54,7 @@ module Bittrex
     end
 
     def post(path, options = {})
-      response = post_with_sign(path, options)
+      response = post_with_sign(path.gsub(%r{^/}, ''), options)
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
