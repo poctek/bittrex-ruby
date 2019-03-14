@@ -15,39 +15,46 @@ module Bittrex
     end
 
     def initialize(attrs = {})
-      @key = attrs[:key]
+      @key    = attrs[:key]
       @secret = attrs[:secret]
-      @host = attrs[:host] || 'https://api.bittrex.com'
+      @host   = attrs[:host] || 'https://api.bittrex.com'
+    end
+
+    def get_with_sign(path, options = {})
+      params                     = options.dup
+      read_timeout, open_timeout = params.delete(:read_timeout) {3}, params.delete(:open_timeout) {2}
+
+      nonce  = Time.now.to_i
+      query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
+      query2 = Faraday::Utils::ParamsHash.new.merge!(params).to_query(Faraday::FlatParamsEncoder)
+      query  = [query1, query2].compact.reject {|i| i.empty?} * '&'
+      url    = ["#{host}#{prefix}/#{path}", query].compact * '?'
+
+      RestClient::Request.execute(method: :get, url: url, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
     end
 
     def get(path, options = {})
-      params = options.dup
-      read_timeout, open_timeout = params.delete(:read_timeout){3}, params.delete(:open_timeout){2}
-
-      nonce = Time.now.to_i
-      query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
-      query2 = Faraday::Utils::ParamsHash.new.merge!(params).to_query(Faraday::FlatParamsEncoder)
-      query = [query1, query2].compact.reject{|i| i.empty?} * '&'
-      url = ["#{host}#{prefix}/#{path}",query].compact * '?'
-
-      response = RestClient::Request.execute(method: :get, url: url, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
-
+      response = get_with_sign(path, options)
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
       json['result']
     end
 
-    def post(path, options = {})
-      params = options.dup
-      read_timeout, open_timeout = params.delete(:read_timeout){10}, params.delete(:open_timeout){5}
+    def post_with_sign(path, options = {})
+      params                     = options.dup
+      read_timeout, open_timeout = params.delete(:read_timeout) {10}, params.delete(:open_timeout) {5}
 
-      nonce = Time.now.to_i
+      nonce  = Time.now.to_i
       query1 = Faraday::Utils::ParamsHash[:apikey, key, :nonce, nonce].to_query(Faraday::FlatParamsEncoder)
-      query = [query1].compact.reject(&:empty?) * '&'
-      url = ["#{host}#{prefix}/#{path}",query].compact * '?'
+      query  = [query1].compact.reject(&:empty?) * '&'
+      url    = ["#{host}#{prefix}/#{path}", query].compact * '?'
 
       # response = RestClient.post(url, params, apisign: signature(url))
-      response = RestClient::Request.execute(method: :post, url: url, payload: params, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
+      RestClient::Request.execute(method: :post, url: url, payload: params, headers: {apisign: signature(url)}, open_timeout: open_timeout, read_timeout: read_timeout)
+    end
+
+    def post(path, options = {})
+      response = post_with_sign(path, options)
 
       json = JSON.parse(response.body)
       raise json.to_s unless json['success']
