@@ -1,19 +1,14 @@
+# frozen_string_literal: true
 require 'bittrex/version'
 require 'logger'
 
 module Bittrex
-  autoload :Market, 'bittrex/market'
+  autoload :Api, 'bittrex/api'
   autoload :Client, 'bittrex/client'
   autoload :Clientable, 'bittrex/clientable'
   autoload :Configuration, 'bittrex/configuration'
-  autoload :Currency, 'bittrex/currency'
-  autoload :Deposit, 'bittrex/deposit'
-  autoload :Order, 'bittrex/order'
-  autoload :Quote, 'bittrex/quote'
-  autoload :Summary, 'bittrex/summary'
-  autoload :Wallet, 'bittrex/wallet'
-  autoload :Withdrawl, 'bittrex/withdrawl'
-  autoload :Api, 'bittrex/api'
+  autoload :V2, 'bittrex/v2'
+  autoload :V3, 'bittrex/v3'
 
   class << self
     def client
